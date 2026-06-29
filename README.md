@@ -2,6 +2,8 @@
 
 BuildWorld AI is a visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory.
 
+Live demo: https://buildworld-ai.netlify.app/
+
 ## Features
 
 - Interactive Simulation Studio with draggable graph nodes, editable properties, run/pause/reset controls, speed control, and live metrics.
@@ -62,6 +64,8 @@ Netlify:
 npm run build
 netlify deploy --prod --dir dist
 ```
+
+Production demo: https://buildworld-ai.netlify.app/
 
 Vercel:
 

@@ -2,6 +2,8 @@
 
 BuildWorld AI is a static Vite app. It requires no database and no environment variables.
 
+Production Netlify demo: https://buildworld-ai.netlify.app/
+
 ## Local Production Build
 
 ```bash
@@ -25,6 +27,12 @@ Deploy:
 npm run build
 netlify deploy --prod --dir dist
 ```
+
+Current Netlify project:
+
+- Site name: `buildworld-ai`
+- Site ID: `60b76922-d322-4887-a73b-4601a8f12e5f`
+- Production URL: https://buildworld-ai.netlify.app/
 
 ## Vercel
 

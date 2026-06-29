@@ -12,6 +12,7 @@ dist
 dist-ssr
 output
 .playwright-cli
+.netlify
 *.local
 
 # Editor directories and files
