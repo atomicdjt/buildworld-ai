@@ -2,7 +2,13 @@
 
 BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory—not certified predictions or professional advice.
 
-[Live demo](https://buildworld-ai.netlify.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md)
+[Live demo](https://buildworld-ai-v01-improvements.vercel.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md)
+
+## Source of truth
+
+This repository is the authoritative source for the current standalone BuildWorld AI product. The AI Project Portfolio monorepo may contain a review copy, but product development, release evidence, and canonical documentation are maintained here on `main`.
+
+Generated deployments, screenshots, and reports are outputs of this source and do not supersede the repository.
 
 ## Features
 
@@ -21,7 +27,7 @@ BuildWorld AI is a local-first visual systems-simulation lab for designing, runn
 - Custom SVG/CSS visualizations
 - Browser `localStorage` persistence
 - Vitest for pure simulation-logic tests
-- Static deployment on Netlify or Vercel
+- Static deployment on Vercel, Netlify, or equivalent hosting
 
 ## Quick Start
 
@@ -43,7 +49,7 @@ npm run test
 npm run build
 ```
 
-The GitHub Actions workflow runs the same checks on pushes and pull requests.
+The GitHub Actions workflow runs the same checks on pushes and pull requests. Passing these checks establishes the recorded build and test result; it does not certify the model for engineering, public-health, infrastructure, financial, or safety-critical decisions.
 
 ## Demo Scenarios
 
@@ -68,7 +74,7 @@ For a static deployment:
 npm run build
 ```
 
-Deploy the generated `dist/` directory to Netlify, Vercel, or an equivalent static host. No environment variables are required for the current MVP.
+Deploy the generated `dist/` directory to Vercel, Netlify, or an equivalent static host. No environment variables are required for the current MVP. Record the source commit used for each production deployment so the live demo remains traceable to `main`.
 
 ## Documentation
 
