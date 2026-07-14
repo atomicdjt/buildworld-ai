@@ -1,6 +1,6 @@
 # BuildWorld AI
 
-BuildWorld AI is a visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory.
+BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory—not certified predictions or professional advice.
 
 [Live demo](https://buildworld-ai.netlify.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md)
 
@@ -12,6 +12,8 @@ BuildWorld AI is a visual systems-simulation lab for designing, running, compari
 - SSI System Stability Index: an original 0–100 score across throughput, bottleneck risk, resilience, redundancy, cascade resistance, resource balance, recovery, and optimization potential.
 - Dashboard charts, event logs, critical-node analysis, optimization suggestions, snapshot comparison, Markdown/JSON report export, local save/load, project import/export, and print-to-PDF support.
 - No paid AI API is required. The insight layer is deterministic and local.
+- Reproducible reports record model version, seed, input fingerprint, and multi-seed uncertainty ranges.
+- Named variants preserve baseline/alternative reasoning and expose changed graph inputs.
 
 ## Tech Stack
 
@@ -56,7 +58,7 @@ The GitHub Actions workflow runs the same checks on pushes and pull requests.
 
 ## Responsible-Use Boundary
 
-BuildWorld AI is not a certified engineering model, public-health tool, infrastructure-design recommendation system, ecological forecast, financial tool, or safety-critical decision system. It is intended for education, portfolio review, scenario reasoning, and product exploration.
+BuildWorld AI is not a certified engineering model, public-health tool, infrastructure-design recommendation system, ecological forecast, financial tool, or safety-critical decision system. It is intended for education, portfolio review, scenario reasoning, and product exploration. Its SSI, intervention suggestions, and multi-seed ranges are deterministic heuristics based on user-provided assumptions.
 
 ## Deployment
 

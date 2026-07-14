@@ -1,8 +1,10 @@
 import type { BuiltReport, ReportData } from '../../../types/simulation'
 import { calculateSSI } from '../scoring/ssi'
+import { buildProvenance } from '../modelMetadata'
 
 export const buildSimulationReport = (data: ReportData): BuiltReport => {
   const ssi = calculateSSI(data.scenario, data.state)
+  const provenance = data.provenance ?? buildProvenance(data.scenario, 0)
   const criticalNodes = data.state.cascade.criticalNodes
     .map((id) => data.scenario.nodes.find((node) => node.id === id)?.label ?? id)
     .join(', ') || 'None detected'
@@ -18,6 +20,11 @@ export const buildSimulationReport = (data: ReportData): BuiltReport => {
   const markdown = `# BuildWorld AI System Simulation Report
 
 Generated: ${new Date().toISOString()}
+
+## Reproducibility
+- Model version: ${provenance.modelVersion}
+- Seed: ${provenance.seed}
+- Input fingerprint: ${provenance.inputFingerprint}
 
 ## 1. Executive Summary
 ${data.insights.executiveSummary}
@@ -73,6 +80,13 @@ ${data.insights.methodologyNote}
 
 ## 14. Limitations
 BuildWorld AI is an exploratory educational simulation environment. It does not provide certified infrastructure design, medical or public-health guidance, ecological forecasting, financial advice, or safety-critical recommendations.
+${data.experiment ? `
+
+## 15. Multi-seed experiment
+Runs: ${data.experiment.runs.length}
+- SSI median / p10-p90: ${data.experiment.summary.ssi.median} / ${data.experiment.summary.ssi.p10}-${data.experiment.summary.ssi.p90}
+- Throughput median / p10-p90: ${data.experiment.summary.throughput.median} / ${data.experiment.summary.throughput.p10}-${data.experiment.summary.throughput.p90}
+` : ''}
 `
 
   return {
@@ -81,6 +95,7 @@ BuildWorld AI is an exploratory educational simulation environment. It does not 
       ...data,
       generatedAt: new Date().toISOString(),
       ssi,
+      provenance,
     },
   }
 }

@@ -1,0 +1,22 @@
+name: Simulation issue
+description: Report a reproducible BuildWorld AI behavior or output problem.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: input
+    id: model_version
+    attributes: { label: Model version and browser }
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes: { label: Reproduction steps and expected versus actual outcome }
+    validations: { required: true }
+  - type: textarea
+    id: export
+    attributes: { label: Optional scenario export or input fingerprint, description: Remove sensitive data before sharing. }
+  - type: checkboxes
+    id: decision
+    attributes:
+      label: Impact
+      options:
+        - label: I understand BuildWorld AI is exploratory and did not use this output as sole professional advice.

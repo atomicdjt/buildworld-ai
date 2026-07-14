@@ -6,7 +6,12 @@ import { generateInsights } from './modules/simulation/insights/insightGenerator
 import { clearLocalProject, exportProject, importProject, loadProjectLocally, saveProjectLocally } from './modules/simulation/persistence/projectStorage'
 import { buildSimulationReport } from './modules/simulation/reports/reportBuilder'
 import { calculateSSI } from './modules/simulation/scoring/ssi'
-import type { CascadeExperimentResult, ScenarioComparison, ScenarioSnapshot, ScenarioTemplate, SimulationEdge, SimulationNode, SimulationProject, SimulationState } from './types/simulation'
+import { buildProvenance } from './modules/simulation/modelMetadata'
+import { runExperiment } from './modules/simulation/analysis/experimentRunner'
+import { rankSensitivity } from './modules/simulation/analysis/sensitivity'
+import { compareVariants, createVariant } from './modules/simulation/variants/variantComparison'
+import { createEdge, deleteSelection, duplicateSelection } from './features/studio/graphCommands'
+import type { CascadeExperimentResult, ScenarioComparison, ScenarioSnapshot, ScenarioTemplate, SimulationEdge, SimulationNode, SimulationProject, SimulationState, ScenarioVariant } from './types/simulation'
 
 type Page = 'home' | 'studio' | 'library' | 'dashboard' | 'cascade' | 'optimization' | 'reports' | 'methodology'
 type Selection = { kind: 'node'; id: string } | { kind: 'edge'; id: string } | undefined
@@ -106,12 +111,16 @@ function SystemCanvas({
   selection,
   setSelection,
   setScenario,
+  connectingFrom,
+  onConnectTo,
 }: {
   scenario: ScenarioTemplate
   state: SimulationState
   selection: Selection
   setSelection: (selection: Selection) => void
   setScenario: (scenario: ScenarioTemplate) => void
+  connectingFrom?: string
+  onConnectTo?: (nodeId: string) => void
 }) {
   const canvasRef = useRef<HTMLDivElement>(null)
   const [dragging, setDragging] = useState<string>()
@@ -170,7 +179,7 @@ function SystemCanvas({
               left: `clamp(74px, ${(node.x / 960) * 100}%, calc(100% - 74px))`,
               top: `clamp(44px, ${(node.y / 520) * 100}%, calc(100% - 44px))`,
             }}
-            onClick={() => setSelection({ kind: 'node', id: node.id })}
+            onClick={() => connectingFrom && connectingFrom !== node.id && onConnectTo ? onConnectTo(node.id) : setSelection({ kind: 'node', id: node.id })}
             onPointerDown={(event) => {
               setDragging(node.id)
               event.currentTarget.setPointerCapture(event.pointerId)
@@ -269,11 +278,16 @@ function App() {
   const [cascadeResult, setCascadeResult] = useState<CascadeExperimentResult>()
   const [toast, setToast] = useState('Demo mode ready. No paid AI API required.')
   const [reportPreview, setReportPreview] = useState(false)
+  const [variants, setVariants] = useState<ScenarioVariant[]>(() => [createVariant('Baseline', scenarioTemplates[0], 3, 'Initial template')])
+  const [connectingFrom, setConnectingFrom] = useState<string>()
 
   const ssi = useMemo(() => calculateSSI(scenario, state), [scenario, state])
   const insights = useMemo(() => generateInsights(scenario, state), [scenario, state])
-  const report = useMemo(() => buildSimulationReport({ scenario, state, insights }), [scenario, state, insights])
+  const experiment = useMemo(() => runExperiment(scenario, [3, 5, 7, 11, 13, 17, 19, 23, 29, 31]), [scenario])
+  const sensitivity = useMemo(() => rankSensitivity(scenario, 3), [scenario])
+  const report = useMemo(() => buildSimulationReport({ scenario, state, insights, provenance: buildProvenance(scenario, 3), experiment }), [scenario, state, insights, experiment])
   const comparison = snapshots.length >= 2 ? compareSnapshots(snapshots[snapshots.length - 2], snapshots[snapshots.length - 1]) : undefined
+  const variantComparison = variants.length >= 2 ? compareVariants(variants[variants.length - 2], variants[variants.length - 1]) : undefined
 
   useEffect(() => {
     if (!running) return undefined
@@ -286,6 +300,7 @@ function App() {
     setScenario(nextScenario)
     setState(runSimulationTick(nextScenario, undefined, { seed: 3 }))
     setSelection(undefined)
+    setVariants([createVariant('Baseline', nextScenario, 3, 'Loaded template')])
     setRunning(false)
     setToast(`${nextScenario.name} loaded.`)
   }
@@ -356,12 +371,50 @@ function App() {
     setToast(`${snapshot.name} saved for comparison.`)
   }
 
+  const saveVariant = (name = `Variant ${variants.length + 1}`, notes = 'Saved from active studio') => {
+    const variant = createVariant(name, scenario, 3, notes, variants.at(-1)?.id)
+    setVariants((current) => [...current, variant].slice(-12))
+    setToast(`${variant.name} saved with reproducible seed 3.`)
+  }
+
+  const startManualConnection = () => {
+    if (selection?.kind !== 'node') { setToast('Select a source node, then choose Connect selected.'); return }
+    setConnectingFrom(selection.id)
+    setToast('Select a different node to finish the connection. Press Escape to cancel.')
+  }
+
+  const finishManualConnection = (target: string) => {
+    if (!connectingFrom) return
+    const result = createEdge(scenario, connectingFrom, target)
+    setConnectingFrom(undefined)
+    if (!result.ok) { setToast(result.error); return }
+    const edge = result.scenario.edges.at(-1)!
+    setScenario(result.scenario)
+    setSelection({ kind: 'edge', id: edge.id })
+    setToast('Manual connection added. Save a variant to preserve the intervention.')
+  }
+
+  const duplicateActiveSelection = () => {
+    const result = duplicateSelection(scenario, selection)
+    setScenario(result.scenario)
+    setSelection(result.selection)
+    setToast(result.selection ? 'Selected node duplicated.' : 'Select a node to duplicate.')
+  }
+
+  const deleteActiveSelection = () => {
+    if (!selection) { setToast('Select a node or connection to delete.'); return }
+    setScenario(deleteSelection(scenario, selection))
+    setSelection(undefined)
+    setToast('Selection deleted.')
+  }
+
   const saveProject = () => {
     const project: SimulationProject = {
       id: 'buildworld-ai-local-project',
       name: scenario.name,
       activeScenario: scenario,
       snapshots,
+      variants,
       updatedAt: new Date().toISOString(),
     }
     saveProjectLocally(project)
@@ -376,6 +429,7 @@ function App() {
     }
     setScenario(project.activeScenario)
     setSnapshots(project.snapshots)
+    setVariants(project.variants?.length ? project.variants : [createVariant('Imported baseline', project.activeScenario, 3, 'Imported project')])
     setState(runSimulationTick(project.activeScenario, undefined, { seed: 9 }))
     setToast('Saved project loaded.')
   }
@@ -400,12 +454,19 @@ function App() {
       const project = importProject(text)
       setScenario(project.activeScenario)
       setSnapshots(project.snapshots)
+      setVariants(project.variants?.length ? project.variants : [createVariant('Imported baseline', project.activeScenario, 3, 'Imported project')])
       setState(runSimulationTick(project.activeScenario, undefined, { seed: 13 }))
       setToast('Project JSON imported.')
     } catch (error) {
       setToast(error instanceof Error ? error.message : 'Project import failed.')
     }
   }
+
+  useEffect(() => {
+    const cancelConnection = (event: KeyboardEvent) => { if (event.key === 'Escape' && connectingFrom) { setConnectingFrom(undefined); setToast('Connection cancelled.') } }
+    window.addEventListener('keydown', cancelConnection)
+    return () => window.removeEventListener('keydown', cancelConnection)
+  }, [connectingFrom])
 
   return (
     <div className="app-shell">
@@ -443,7 +504,7 @@ function App() {
               </div>
             </div>
             <div className="hero-console" aria-label="BuildWorld AI technical preview">
-              <SystemCanvas scenario={scenario} state={state} selection={selection} setSelection={setSelection} setScenario={setScenario} />
+              <SystemCanvas scenario={scenario} state={state} selection={selection} setSelection={setSelection} setScenario={setScenario} connectingFrom={connectingFrom} onConnectTo={finishManualConnection} />
             </div>
           </section>
           <section className="feature-band">
@@ -474,10 +535,14 @@ function App() {
             </select>
             <div className="tool-stack">
               <button type="button" onClick={addNode}>Add node</button>
+              <button type="button" onClick={startManualConnection}>{connectingFrom ? 'Choose target node' : 'Connect selected'}</button>
               <button type="button" onClick={connectCriticalPair}>Add redundancy</button>
+              <button type="button" onClick={duplicateActiveSelection}>Duplicate selected</button>
+              <button type="button" onClick={deleteActiveSelection}>Delete selected</button>
+              <button type="button" onClick={() => saveVariant()}>Save variant</button>
               <button type="button" onClick={saveSnapshot}>Save snapshot</button>
               <button type="button" onClick={runCascade}>Run cascade test</button>
-              <button type="button" onClick={() => downloadText('buildworld-project.json', exportProject({ id: 'buildworld-ai-local-project', name: scenario.name, activeScenario: scenario, snapshots, updatedAt: new Date().toISOString() }), 'application/json')}>Export JSON</button>
+              <button type="button" onClick={() => downloadText('buildworld-project.json', exportProject({ id: 'buildworld-ai-local-project', name: scenario.name, activeScenario: scenario, snapshots, variants, updatedAt: new Date().toISOString() }), 'application/json')}>Export JSON</button>
               <label className="file-button">
                 Import JSON
                 <input type="file" accept="application/json" onChange={(event) => void importFromFile(event.target.files?.[0])} />
@@ -515,7 +580,7 @@ function App() {
                   <MetricCard label="Bottlenecks" value={state.metrics.bottleneckCount} sublabel="active findings" />
                   <MetricCard label="Resilience" value={state.metrics.resilienceScore} sublabel="0-100 score" />
                 </div>
-                <SystemCanvas scenario={scenario} state={state} selection={selection} setSelection={setSelection} setScenario={setScenario} />
+                <SystemCanvas scenario={scenario} state={state} selection={selection} setSelection={setSelection} setScenario={setScenario} connectingFrom={connectingFrom} onConnectTo={finishManualConnection} />
               </>
             ) : null}
 
@@ -539,6 +604,16 @@ function App() {
                   <h3>Time-series history</h3>
                   <Sparkline points={state.history} field="ssi" />
                   <Sparkline points={state.history} field="totalThroughput" />
+                </article>
+                <article className="wide-panel">
+                  <h3>Multi-seed uncertainty range</h3>
+                  <p>10 deterministic runs. SSI median {experiment.summary.ssi.median}; p10-p90 {experiment.summary.ssi.p10}-{experiment.summary.ssi.p90}. This is an exploratory range, not a forecast.</p>
+                  <p>Throughput median {experiment.summary.throughput.median}; p10-p90 {experiment.summary.throughput.p10}-{experiment.summary.throughput.p90}.</p>
+                </article>
+                <article className="wide-panel">
+                  <h3>Input sensitivity</h3>
+                  <p>One bounded input is varied at a time. These are model sensitivities, not causal claims about a real system.</p>
+                  {sensitivity.map((finding) => <p key={`${finding.nodeId}-${finding.field}`}><strong>{finding.label}</strong>: adjusting {finding.field} {finding.direction} SSI by {finding.magnitude.toFixed(1)} ({finding.baselineSSI} → {finding.adjustedSSI}).</p>)}
                 </article>
                 {ssi.components.map((component) => (
                   <article key={component.name} className="score-row">
@@ -608,6 +683,13 @@ function App() {
                 ) : (
                   <article className="empty-state">Save two snapshots to unlock before/after scenario comparison.</article>
                 )}
+                <article className="comparison-panel">
+                  <h3>Named variant comparison</h3>
+                  {variantComparison ? <>
+                    <div className="delta-row"><MetricCard label="SSI change" value={variantComparison.ssiChange} /><MetricCard label="Throughput" value={variantComparison.throughputChange.toFixed(1)} /><MetricCard label="Resilience" value={variantComparison.resilienceChange.toFixed(1)} /></div>
+                    <p>{variantComparison.inputChanges.length ? variantComparison.inputChanges.slice(0, 5).map((change) => `${change.entity}: ${change.field} ${change.before} → ${change.after}`).join(' • ') : 'No material graph-input changes were detected.'}</p>
+                  </> : <p>Save a baseline and one changed variant to see transparent input differences.</p>}
+                </article>
                 {reportPreview ? <pre className="report-preview">{report.markdown}</pre> : null}
               </section>
             ) : null}

@@ -1,7 +1,7 @@
 {
   "name": "buildworld-ai",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A visual simulation lab for graph-based systems, cascade analysis, SSI scoring, and exportable scenario reports.",
   "type": "module",
   "scripts": {
