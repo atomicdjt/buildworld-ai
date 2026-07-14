@@ -271,16 +271,51 @@ export interface ScenarioComparison {
   recommendationSummary: string
 }
 
+export interface SimulationProvenance {
+  modelVersion: string
+  seed: number
+  generatedAt: string
+  inputFingerprint: string
+}
+
+export interface ScenarioVariant {
+  id: string
+  name: string
+  parentId?: string
+  scenario: ScenarioTemplate
+  seed: number
+  notes: string
+  createdAt: string
+}
+
+export interface VariantInputChange { entity: string; field: string; before: string; after: string }
+export interface VariantComparison {
+  baseline: ScenarioVariant
+  candidate: ScenarioVariant
+  inputChanges: VariantInputChange[]
+  ssiChange: number
+  throughputChange: number
+  bottleneckChange: number
+  resilienceChange: number
+  cascadeRiskChange: number
+}
+
+export interface ExperimentRun { seed: number; ssi: number; throughput: number; resilience: number; bottlenecks: number }
+export interface DistributionSummary { median: number; p10: number; p90: number }
+export interface ExperimentSummary { ssi: DistributionSummary; throughput: DistributionSummary; resilience: DistributionSummary }
+export interface ExperimentResult { seeds: number[]; runs: ExperimentRun[]; summary: ExperimentSummary }
+
 export interface SimulationProject {
   id: string
   name: string
   activeScenario: ScenarioTemplate
   snapshots: ScenarioSnapshot[]
   updatedAt: string
+  variants?: ScenarioVariant[]
 }
 
 export interface ProjectExport extends SimulationProject {
-  schemaVersion: 1
+  schemaVersion: 1 | 2
   exportedAt: string
 }
 
@@ -318,9 +353,11 @@ export interface ReportData {
   scenario: ScenarioTemplate
   state: SimulationState
   insights: InsightSummary
+  provenance?: SimulationProvenance
+  experiment?: ExperimentResult
 }
 
 export interface BuiltReport {
   markdown: string
-  json: ReportData & { generatedAt: string; ssi: SSIResult }
+  json: ReportData & { generatedAt: string; ssi: SSIResult; provenance: SimulationProvenance }
 }

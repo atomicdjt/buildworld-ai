@@ -1,12 +1,12 @@
-import type { ProjectExport, SimulationProject } from '../../../types/simulation'
+import type { ProjectExport, ScenarioVariant, SimulationProject } from '../../../types/simulation'
 
 const storageKey = 'buildworld-ai-project'
 
-export const exportProject = (project: SimulationProject): string =>
+export const exportProject = (project: SimulationProject & { variants?: ScenarioVariant[] }): string =>
   JSON.stringify(
     {
       ...project,
-      schemaVersion: 1,
+      schemaVersion: 2,
       exportedAt: new Date().toISOString(),
     } satisfies ProjectExport,
     null,
@@ -15,7 +15,7 @@ export const exportProject = (project: SimulationProject): string =>
 
 export const importProject = (payload: string): SimulationProject => {
   const parsed = JSON.parse(payload) as ProjectExport
-  if (parsed.schemaVersion !== 1) {
+  if (parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2) {
     throw new Error('Unsupported BuildWorld AI project schema.')
   }
   if (!parsed.activeScenario?.nodes?.length || !parsed.activeScenario?.edges) {
@@ -26,6 +26,7 @@ export const importProject = (payload: string): SimulationProject => {
     name: parsed.name,
     activeScenario: parsed.activeScenario,
     snapshots: parsed.snapshots ?? [],
+    variants: parsed.variants ?? [],
     updatedAt: parsed.updatedAt ?? parsed.exportedAt,
   }
 }

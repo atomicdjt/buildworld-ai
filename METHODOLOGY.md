@@ -26,7 +26,7 @@ Cascade analysis models triggering stress, affected nodes, dependency paths, red
 
 ## SSI
 
-SSI is an original educational heuristic, not a certification. Severity bands:
+SSI is an original educational heuristic, not a certification. Reports record model version, deterministic seed, and input fingerprint so a scenario can be reproduced. Multi-seed ranges describe variation in this model; they are not confidence intervals for the real world. Severity bands:
 
 - 85-100: Strong
 - 70-84: Stable
