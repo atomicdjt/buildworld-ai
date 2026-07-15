@@ -74,7 +74,7 @@ For a static deployment:
 npm run build
 ```
 
-Deploy the generated `dist/` directory to Vercel, Netlify, or an equivalent static host. No environment variables are required for the current MVP. Record the source commit used for each production deployment so the live demo remains traceable to `main`.
+Deploy the generated `dist/` directory through Vercel for the canonical public release. The current live demo is deployed from `main`; record the source commit used for each production deployment so the public experience remains traceable. The static output can also be hosted elsewhere for private evaluation, but those hosts are not the current canonical deployment.
 
 ## Documentation
 
