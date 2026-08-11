@@ -1,5 +1,7 @@
 # BuildWorld AI
 
+**Systems Simulation Lab by David Turner · [atomicdjt](https://github.com/atomicdjt)**
+
 BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory—not certified predictions or professional advice.
 
 [Live demo](https://buildworld-ai-v01-improvements.vercel.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md)
@@ -27,7 +29,7 @@ Generated deployments, screenshots, and reports are outputs of this source and d
 - Custom SVG/CSS visualizations
 - Browser `localStorage` persistence
 - Vitest for pure simulation-logic tests
-- Static deployment on Vercel, Netlify, or equivalent hosting
+- Canonical static deployment on Vercel
 
 ## Quick Start
 
