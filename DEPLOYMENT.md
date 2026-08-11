@@ -2,7 +2,9 @@
 
 BuildWorld AI is a static Vite app. It requires no database and no environment variables.
 
-Production Netlify demo: https://buildworld-ai.netlify.app/
+Canonical production demo: https://buildworld-ai-v01-improvements.vercel.app/
+
+The earlier Netlify deployment is retained as historical evidence only. It is not the current production authority.
 
 ## Local Production Build
 
@@ -13,7 +15,7 @@ npm run build
 
 The production output is `dist`.
 
-## Netlify
+## Historical Netlify Configuration
 
 `netlify.toml` is included:
 
@@ -21,14 +23,7 @@ The production output is `dist`.
 - Publish directory: `dist`
 - SPA fallback: `/* -> /index.html`
 
-Deploy:
-
-```bash
-npm run build
-netlify deploy --prod --dir dist
-```
-
-Current Netlify project:
+Historical project record:
 
 - Site name: `buildworld-ai`
 - Site ID: `60b76922-d322-4887-a73b-4601a8f12e5f`
@@ -36,7 +31,7 @@ Current Netlify project:
 
 ## Vercel
 
-Deploy:
+After local validation and an approved release gate, the deployment command is:
 
 ```bash
 npm run build
@@ -44,6 +39,8 @@ vercel --prod
 ```
 
 Framework preset: Vite. Output directory: `dist`.
+
+A successful local build or Vercel `READY` state is not production verification. Confirm the rendered canonical URL, title, primary studio workflow, responsive layout, and browser console after deployment.
 
 ## Static Fallback
 
