@@ -4,7 +4,11 @@
 
 BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory—not certified predictions or professional advice.
 
-[Live demo](https://buildworld-ai-v01-improvements.vercel.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md)
+[Live demo](https://buildworld-ai-v01-improvements.vercel.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md) · [Full portfolio](https://ai-project-portfolio-portfolio-hub.vercel.app/)
+
+![BuildWorld AI systems simulation studio](https://ai-project-portfolio-portfolio-hub.vercel.app/images/buildworld-ai-studio.png)
+
+**More by David Turner:** [WeaveStudio](https://github.com/atomicdjt/weavestudio) · [Validation Ledger](https://github.com/atomicdjt/validation-ledger) · [GitHub profile](https://github.com/atomicdjt)
 
 ## Source of truth
 
