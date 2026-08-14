@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buildworld-ai-v01-improvements.vercel.app/sitemap.xml
