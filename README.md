@@ -2,9 +2,25 @@
 
 **Systems Simulation Lab by David Turner · [atomicdjt](https://github.com/atomicdjt)**
 
-BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems. It focuses on bottlenecks, cascading failures, resilience, optimization, and emergent behavior while staying clear that the results are educational and exploratory—not certified predictions or professional advice.
+### What is this?
+BuildWorld AI is a local-first visual systems-simulation lab for designing, running, comparing, and reporting graph-based models of complex systems.
 
-[Live demo](https://buildworld-ai-v01-improvements.vercel.app/) · [Case study](./CASE_STUDY.md) · [Architecture](./ARCHITECTURE.md) · [Methodology](./METHODOLOGY.md) · [Testing](./TESTING.md) · [Full portfolio](https://ai-project-portfolio-portfolio-hub.vercel.app/)
+### Who is it for?
+It is built for educators, product explorers, system thinkers, and researchers who need a standalone sandbox to experiment with network topologies and cascading behaviors without relying on external APIs or complex cloud infrastructure.
+
+### Why is it interesting?
+It models bottlenecks, cascading failures, resilience, optimization, and emergent behavior entirely in the browser. It features a deterministic Simulation Engine, an original System Stability Index (SSI) heuristic, and reproducible JSON/Markdown reporting—demonstrating complex interactive state management and visual rendering in React.
+
+### Can I see it?
+**Yes.** [Launch the Live Demo](https://buildworld-ai-v01-improvements.vercel.app/)
+
+### Where is the evidence?
+The project's architectural decisions, simulation methodology, and test coverage are fully documented:
+- [Case Study](./CASE_STUDY.md)
+- [Architecture](./ARCHITECTURE.md)
+- [Methodology](./METHODOLOGY.md)
+- [Testing](./TESTING.md)
+- [Full portfolio](https://ai-project-portfolio-portfolio-hub.vercel.app/)
 
 ![BuildWorld AI systems simulation studio](https://ai-project-portfolio-portfolio-hub.vercel.app/images/buildworld-ai-studio.png)
 
