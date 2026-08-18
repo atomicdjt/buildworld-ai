@@ -1,4 +1,4 @@
-# BuildWorld AI
+# BuildWorld AI — Local-First Systems Simulation Lab
 
 **Systems Simulation Lab by David Turner · [atomicdjt](https://github.com/atomicdjt)**
 
