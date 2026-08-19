@@ -39,3 +39,20 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Release browser acceptance
+        run: |
+          npm run preview -- --port 4173 > /tmp/buildworld-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then
+              break
+            fi
+            if [[ "$attempt" == "30" ]]; then
+              cat /tmp/buildworld-preview.log
+              exit 1
+            fi
+            sleep 1
+          done
+          node scripts/release-browser-check.mjs
