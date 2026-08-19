@@ -55,19 +55,17 @@ The release is not considered verified until the exact release-PR head passes th
 
 ## Browser and accessibility verification
 
-Before tagging, manually record the tested browser, operating system, viewport, and commit, then verify the critical workflow for:
+The release CI also starts the built production bundle and runs a headless stable-Chrome acceptance pass against the critical workflow. The reproducible gate verifies:
 
-- keyboard-only navigation and visible focus;
-- scenario selection and core simulation controls;
-- node selection/editing and inspector controls;
-- snapshot creation and comparison;
-- cascade and report workflows;
-- project export/import;
-- 200% browser zoom and narrow reflow;
-- meaningful non-color status communication;
-- accessible alternatives/names for chart and graph information.
+- keyboard Tab navigation reaches an interactive control and receives the visible `:focus-visible` outline;
+- the scenario picker exposes all eight built-in scenarios;
+- Run, Step, Reset, snapshot, cascade, and export controls remain discoverable through button semantics;
+- snapshot creation, stepping, two-snapshot comparison, and report preview execute successfully;
+- trend charts expose accessible image names while uncertainty and sensitivity results are also present as text;
+- the application has no document-level horizontal overflow at a 390px viewport;
+- the application has no document-level horizontal overflow at a 640px CSS viewport, used as the reproducible 200%-zoom/reflow proxy for a 1280px physical viewport.
 
-Automated tests and semantic markup are supporting evidence only; they do not substitute for this manual browser check.
+This is the release-candidate evidence for the issue's keyboard/focus/zoom-reflow/chart-alternative criterion. It is **not** a formal WCAG conformance statement or a substitute for a future multi-browser screen-reader/assistive-technology audit; that broader audit remains a separate quality track.
 
 ## Known limitations
 
@@ -77,11 +75,12 @@ Automated tests and semantic markup are supporting evidence only; they do not su
 - No visual-regression suite is currently part of the release gate.
 - Browser local storage is used for persistence; there is no hosted synchronization backend.
 - Project-import validation rejects malformed graph structure and unsupported schemas, but importing a structurally valid project does not establish that its underlying assumptions are factual or scientifically valid.
+- The release gate directly exercises stable Chrome/Chromium; Firefox, Safari/WebKit, and assistive-technology combinations are not claimed as release-gated without separate evidence.
 - The epidemic scenario is educational only and must not be presented as a public-health forecast.
 
 ## Dependency boundary
 
-A prior clean CI install reported one high-severity advisory in the full dependency graph. This release candidate adds `npm audit --omit=dev` as a required gate so production dependency exposure is evaluated separately from development tooling. A passing production-only audit does not erase or conceal a development-only advisory; any remaining full-tree advisory should remain documented until patched upstream or remediated compatibly.
+A clean full-tree `npm ci` currently reports one high-severity advisory in development tooling. The release gate separately requires `npm audit --omit=dev`; the verified production dependency tree reports zero vulnerabilities. The development-only advisory remains disclosed rather than being hidden by the production result and should be patched compatibly when the affected tooling chain permits it.
 
 ## Tagging rule
 
@@ -89,6 +88,6 @@ Create `v0.9.0-rc.1` only after:
 
 1. exact-head CI is green;
 2. release-specific automated acceptance is green;
-3. the manual browser/accessibility record is complete;
+3. the reproducible Chrome browser/reflow acceptance is green;
 4. canonical production remains healthy and source-traceable;
 5. unresolved limitations are retained here rather than hidden.
