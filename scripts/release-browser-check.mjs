@@ -27,32 +27,32 @@ try {
   assert.notEqual(focusEvidence.outlineStyle, 'none')
   assert.notEqual(focusEvidence.outlineWidth, '0px')
 
-  await page.getByRole('button', { name: 'Open Studio' }).click()
-  const scenarioPicker = page.getByRole('combobox', { name: 'Choose scenario' })
+  await page.getByRole('button', { name: 'Open Studio', exact: true }).click()
+  const scenarioPicker = page.getByRole('combobox', { name: 'Choose scenario', exact: true })
   await scenarioPicker.waitFor()
   const optionCount = await scenarioPicker.locator('option').count()
   assert.equal(optionCount, 8)
 
   // Core deterministic workflow controls remain keyboard-addressable buttons.
   for (const name of ['Run', 'Step', 'Reset', 'Save snapshot', 'Run cascade test', 'Export JSON']) {
-    await page.getByRole('button', { name }).waitFor()
+    await page.getByRole('button', { name, exact: true }).waitFor()
   }
 
   // Exercise snapshot and comparison/report surfaces.
-  await page.getByRole('button', { name: 'Save snapshot' }).click()
-  await page.getByRole('button', { name: 'Step' }).click()
-  await page.getByRole('button', { name: 'Save snapshot' }).click()
-  await page.getByRole('button', { name: 'Reports' }).click()
-  await page.getByRole('heading', { name: 'Snapshot comparison' }).waitFor()
-  await page.getByRole('button', { name: 'Preview report' }).click()
+  await page.getByRole('button', { name: 'Save snapshot', exact: true }).click()
+  await page.getByRole('button', { name: 'Step', exact: true }).click()
+  await page.getByRole('button', { name: 'Save snapshot', exact: true }).click()
+  await page.getByRole('button', { name: 'Reports', exact: true }).click()
+  await page.getByRole('heading', { name: 'Snapshot comparison', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Preview report', exact: true }).click()
   await page.locator('pre.report-preview').waitFor()
 
   // Chart information exposes accessible image names, while numeric/textual metrics remain in the DOM.
-  await page.getByRole('button', { name: 'Dashboard' }).click()
+  await page.getByRole('button', { name: 'Dashboard', exact: true }).click()
   const accessibleCharts = page.locator('svg[role="img"][aria-label]')
   assert.ok((await accessibleCharts.count()) >= 2)
-  await page.getByText('Multi-seed uncertainty range').waitFor()
-  await page.getByText('Input sensitivity').waitFor()
+  await page.getByText('Multi-seed uncertainty range', { exact: true }).waitFor()
+  await page.getByText('Input sensitivity', { exact: true }).waitFor()
 
   // Narrow reflow check.
   await page.setViewportSize({ width: 390, height: 844 })
@@ -64,8 +64,8 @@ try {
   await page.setViewportSize({ width: 640, height: 800 })
   const zoomProxyOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   assert.ok(zoomProxyOverflow <= 1, `200% zoom proxy has ${zoomProxyOverflow}px horizontal overflow`)
-  await page.getByRole('button', { name: 'Studio' }).waitFor()
-  await page.getByRole('button', { name: 'Reports' }).waitFor()
+  await page.getByRole('button', { name: 'Studio', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Reports', exact: true }).waitFor()
 
   console.log('BuildWorld release browser acceptance passed: keyboard focus, core workflow, eight-scenario picker, snapshot/report flow, chart naming, 390px reflow, and 200% zoom proxy.')
 } finally {
