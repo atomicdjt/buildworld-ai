@@ -46,3 +46,10 @@ jobs:
           test "$actual" = "$TARGET_SHA"
           echo "VERIFIED_TAG=${TAG_NAME}"
           echo "VERIFIED_COMMIT=${actual}"
+
+      - name: Delete temporary execution branch
+        if: always()
+        env:
+          BRANCH_NAME: ops/create-v0.9.0-rc.1
+        run: |
+          git push origin ":refs/heads/${BRANCH_NAME}" || true
