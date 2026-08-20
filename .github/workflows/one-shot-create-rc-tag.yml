@@ -1,0 +1,48 @@
+name: One-shot create BuildWorld RC tag
+
+on:
+  push:
+    branches:
+      - ops/create-v0.9.0-rc.1
+    paths:
+      - .github/ops/run-create-v0.9.0-rc.1
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create and verify release tag
+        env:
+          TARGET_SHA: 82c6b1c77249e510b31304e2d091749213bce690
+          TAG_NAME: v0.9.0-rc.1
+        run: |
+          set -euo pipefail
+
+          resolved="$(git rev-parse "${TARGET_SHA}^{commit}")"
+          test "$resolved" = "$TARGET_SHA"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG_NAME}" >/dev/null 2>&1; then
+            git fetch --force origin "refs/tags/${TAG_NAME}:refs/tags/${TAG_NAME}"
+            existing="$(git rev-list -n 1 "$TAG_NAME")"
+            test "$existing" = "$TARGET_SHA"
+            echo "Tag already exists at intended release commit: $existing"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG_NAME" "$TARGET_SHA" -m "BuildWorld AI $TAG_NAME"
+            git push origin "refs/tags/${TAG_NAME}"
+          fi
+
+          git fetch --force origin "refs/tags/${TAG_NAME}:refs/tags/${TAG_NAME}"
+          actual="$(git rev-list -n 1 "$TAG_NAME")"
+          test "$actual" = "$TARGET_SHA"
+          echo "VERIFIED_TAG=${TAG_NAME}"
+          echo "VERIFIED_COMMIT=${actual}"
