@@ -4,6 +4,8 @@
 
 **[Canonical project page](https://ai-project-portfolio-portfolio-hub.vercel.app/projects/buildworld-ai) · [Launch the live simulation lab](https://buildworld-ai-v01-improvements.vercel.app/) · [Methodology](./METHODOLOGY.md) · [Architecture](./ARCHITECTURE.md) · [Testing](./TESTING.md)**
 
+**License:** Source-visible for evaluation under the [BuildWorld AI Portfolio License](./LICENSE.md). This is **not an open-source license** and does not grant redistribution, derivative-work, or commercial-use rights beyond the permissions stated in that license.
+
 BuildWorld AI is a browser-based systems simulation lab for designing, running, comparing, and reporting graph models of complex systems. Its core simulation and insight layer is deterministic: no paid AI API is required to run or explain a scenario.
 
 ### Why it is interesting
