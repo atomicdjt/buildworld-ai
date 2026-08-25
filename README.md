@@ -2,7 +2,7 @@
 
 **Explore bottlenecks, cascades, resilience, and interventions in graph-based systems—and reproduce the result from the recorded model version, seed, and inputs.**
 
-**[Launch the live simulation lab](https://buildworld-ai-v01-improvements.vercel.app/) · [Methodology](./METHODOLOGY.md) · [Architecture](./ARCHITECTURE.md) · [Testing](./TESTING.md)**
+**[Canonical project page](https://ai-project-portfolio-portfolio-hub.vercel.app/projects/buildworld-ai) · [Launch the live simulation lab](https://buildworld-ai-v01-improvements.vercel.app/) · [Methodology](./METHODOLOGY.md) · [Architecture](./ARCHITECTURE.md) · [Testing](./TESTING.md)**
 
 BuildWorld AI is a browser-based systems simulation lab for designing, running, comparing, and reporting graph models of complex systems. Its core simulation and insight layer is deterministic: no paid AI API is required to run or explain a scenario.
 
@@ -131,4 +131,4 @@ Deploy the generated `dist/` directory through Vercel for the canonical public r
 
 ## More projects
 
-[Validation Ledger](https://github.com/atomicdjt/validation-ledger) · [WeaveStudio](https://github.com/atomicdjt/weavestudio) · [GitHub profile](https://github.com/atomicdjt) · [Full portfolio](https://ai-project-portfolio-portfolio-hub.vercel.app/)
+[Canonical BuildWorld AI page](https://ai-project-portfolio-portfolio-hub.vercel.app/projects/buildworld-ai) · [Validation Ledger](https://github.com/atomicdjt/validation-ledger) · [WeaveStudio](https://github.com/atomicdjt/weavestudio) · [GitHub profile](https://github.com/atomicdjt) · [Full portfolio](https://ai-project-portfolio-portfolio-hub.vercel.app/)
