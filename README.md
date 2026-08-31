@@ -8,7 +8,7 @@
 
 BuildWorld AI is a browser-based systems simulation lab for designing, running, comparing, and reporting graph models of complex systems. Its core simulation and insight layer is deterministic: no paid AI API is required to run or explain a scenario.
 
-### Why it is interesting
+## Why it is interesting
 
 - **Reproducibility is explicit.** Reports record model version, seed, input fingerprint, and multi-seed ranges.
 - **Cascades are inspectable.** The studio exposes critical nodes, bottlenecks, failures, recovery, and intervention effects rather than returning a black-box answer.
