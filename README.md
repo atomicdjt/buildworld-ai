@@ -1,5 +1,7 @@
 # BuildWorld AI — Reproducible Systems Simulation Lab
 
+[![CI](https://github.com/atomicdjt/buildworld-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdjt/buildworld-ai/actions/workflows/ci.yml)
+
 **Explore bottlenecks, cascades, resilience, and interventions in graph-based systems—and reproduce the result from the recorded model version, seed, and inputs.**
 
 **[Canonical project page](https://ai-project-portfolio-portfolio-hub.vercel.app/projects/buildworld-ai) · [Launch the live simulation lab](https://buildworld-ai-v01-improvements.vercel.app/) · [Methodology](./METHODOLOGY.md) · [Architecture](./ARCHITECTURE.md) · [Testing](./TESTING.md)**
