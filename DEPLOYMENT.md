@@ -9,19 +9,15 @@ The earlier Netlify deployment is retained as historical evidence only. It is no
 ## Local Production Build
 
 ```bash
-npm install
+npm ci
 npm run build
 ```
 
 The production output is `dist`.
 
-## Historical Netlify Configuration
+## Historical Netlify Deployment
 
-`netlify.toml` is included:
-
-- Build command: `npm run build`
-- Publish directory: `dist`
-- SPA fallback: `/* -> /index.html`
+The former `netlify.toml` configuration was removed from the current branch when Vercel became the only deployment authority. Do not use the historical Netlify project for current release verification.
 
 Historical project record:
 
