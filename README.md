@@ -1,3 +1,15 @@
+<div align="center">
+
+<img src="./docs/images/repository-header.svg" alt="BUILDWORLD AI — portfolio identity banner" width="100%" />
+
+<br />
+
+[**PROJECT PAGE**](https://ai-project-portfolio-portfolio-hub.vercel.app/projects/buildworld-ai) · [**LIVE LAB**](https://buildworld-ai-v01-improvements.vercel.app/) · [**PROFILE**](https://github.com/atomicdjt) · [**METHODOLOGY**](METHODOLOGY.md)
+
+</div>
+
+<br />
+
 # BuildWorld AI — Reproducible Systems Simulation Lab
 
 [![CI](https://github.com/atomicdjt/buildworld-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdjt/buildworld-ai/actions/workflows/ci.yml)
